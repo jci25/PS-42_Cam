@@ -5,7 +5,7 @@ MJPEG Streamer with raspicam input plugin (based on raspistill mmal source code)
 
 Simply compile with 'make clean all' from within the mjpeg streamer experimental folder.
 
-You'll need to have cmake and a dev version of libjpeg installed. I used libjpeg62-dev.
+You'll need to have cmake and a dev version of libjpeg installed. I used libjpeg8-dev and cmake needs to be preinstalled on the rpi.
 
 
 Discussion / Questions / Help
