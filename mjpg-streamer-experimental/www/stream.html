@@ -8,6 +8,48 @@
     <script type="text/javascript" src="jquery.js"></script>    
     <script type="text/javascript" src="./jsfeat.js"></script>    
     <script type="text/javascript" src="jquery.rotate.js"></script>
+    <link rel="stylesheet" href="jquery.checkbox.css" />
+		<link rel="stylesheet" href="jquery.safari-checkbox.css" />
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="jquery.checkbox.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('input:checkbox:not([safari])').checkbox();
+				$('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
+				$('input:radio').checkbox();
+			});
+
+			displayForm = function (elementId)
+			{
+				var content = [];
+				$('#' + elementId + ' input').each(function(){
+					var el = $(this);
+					if ( (el.attr('type').toLowerCase() == 'radio'))
+					{
+						if ( this.checked )
+							content.push([
+								'"', el.attr('name'), '": ',
+								'value="', ( this.value ), '"',
+								( this.disabled ? ', disabled' : '' )
+							].join(''));
+					}
+					else
+						content.push([
+							'"', el.attr('name'), '": ',
+							( this.checked ? 'checked' : 'not checked' ), 
+							( this.disabled ? ', disabled' : '' )
+						].join(''));
+				});
+				alert(content.join('\n'));
+			}
+			
+			changeStyle = function(skin)
+			{
+				jQuery('#myform :checkbox').checkbox((skin ? {cls: skin} : {}));
+			}
+			
+		</script>
+		
     <!--[if IE 6]>
     <link rel="stylesheet" href="fix.css" type="text/css" />
     <![endif]-->
@@ -15,6 +57,16 @@
     
     var phi = 0, flipped = 0, mirrored = 0;
 
+	function toggleCheckbox(id)
+ 	{
+		var e = document.getElementById(id);
+		if(e.style.display == 'none')
+          		e.style.display = 'block';
+       		else
+          		e.style.display = 'none';
+ 	}
+	
+ 
 	function setXformClass () {
 		$('.xform').each(function(idx,el) {
 			el.className = "xform x" +(flipped ? "-flipped":"") + (mirrored ? "-mirrored" : "") + "-rotated-" + phi;
@@ -43,6 +95,21 @@
 		});
 	});
 	</script>
+	<style type="text/css">
+body, html { padding: 0px; margin: 0px; background: #ccc; font-family: Arial;font-size: 13px;}
+h1 {margin: 20px 0 0 0;padding: 0;color: #09f;font-size: 28px; text-align: center;font-weight: bold;}
+h2 {margin: 25px 0 0 0;padding: 0;font-size: 20px;}
+h3 {margin: 25px 0 0 0;padding: 0;font-size: 16px;}
+p {clear: both;vertical-align: middle;font-size: 13px;margin: 10px 0 0 0;padding: 0;}
+pre { display: block;margin: 0px;padding: 2px 2px 2px 2px; border: 1px solid #888; background: #ccc;}
+code { display: block;margin: 0px;padding: 2px 2px 2px 20px;border: 1px solid #888;background: #fff;}
+.hr { clear: both;margin: 20px 0 20px 0;font-size: 2px;line-height: 2px;background: #ccc;border: 1px solid #888;height: 2px;display: block;}
+table {font-size: 13px;}
+a {color: #069;}
+a:hover{color: #e30;}
+a.code{display: block;float:left;clear:both;padding: 2px 0px;}
+label { cursor: hand; cursor: pointer;}
+		</style>
   </head>
 
   <body>
@@ -61,17 +128,53 @@
     <div id="content">
       <h1>Stream</h1>
       <h2>Display the stream</h2>
-
-
-	<p id="xform">
-		<button id="rotate"><div class="btnface"></div></button>
-		<button id="mirror"><div class="btnface"></div></button>
-		<button id="flip"><div class="btnface"></div></button>
-	</p>
-	<p class="xform-p"></p>
-	<p id="streamwrap" class="xform-p">
-		<img id="streamimage" class="xform" src="/?action=stream" />
-	</p>
-
+	
+	<div class="imgHolder">
+    		<img id="streamimage" class="xform" src="/?action=stream" />
+    		<temp id="temp">Temp: XX</temp>
+		<humidity id="hum">Humidity: XX</humidity>
+		<depth id="dep">Depth: XX</depth>
+		<battery id="batt">Battery: XX</battery>
+		<heading id="head">Heading: XX</heading>
+		<bot>.</bot>
+		</div>
+	
+	
+	<form id="myform" action="javascript:alert();">
+			<table cellspacing="5">
+				<tr><th>&nbsp;</th><th>Metadata</th></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('temp')" checked/></td><td>Temperature</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('hum')" checked/></td><td>Humidity</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('dep')" checked/></td><td>Depth</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('batt')" checked/></td><td>Battery</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('head')" checked/></td><td>Heading</td></tr>
+			</table>
+		</form>
+	</div>
+	
+	
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    		<script>
+    		  var socket = io('http://192.168.1.102:8888');
+		  
+		  socket.emit('chat message', 't');
+      		  socket.on('chat message', function(msg){
+		  	
+		  	var msg_arr = msg.split(", ");
+			var temp1 = msg_arr[0].split(" : ");
+       		  	document.getElementById("temp").innerHTML = "Temp: ".concat(temp1[1]);
+			var hum1 = msg_arr[1].split(" : ")
+       		  	document.getElementById("hum").innerHTML = "Humidity: ".concat(hum1[1]);
+			
+			
+     		  });
+		  socket.on('other', function(msg){
+       		  	document.getElementById("head").innerHTML = "Heading: ".concat(msg);
+			
+			
+     		  });
+    		</script>
+	
   </body>
 </html>
