@@ -137,17 +137,27 @@ label { cursor: hand; cursor: pointer;}
 		<battery id="batt">Battery: XX</battery>
 		<heading id="head">Heading: XX</heading>
 		<bot>.</bot>
+		<div class="imu">
+			<roll id="roll">Roll: XX</roll>
+			<pitch id="pitch">Pitch: XX</pitch>
+			<yaw id="yaw">Yaw: XX</yaw>
 		</div>
+	</div>
+	</br>
+	
 	
 	
 	<form id="myform" action="javascript:alert();">
 			<table cellspacing="5">
 				<tr><th>&nbsp;</th><th>Metadata</th></tr>
-				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('temp')" checked/></td><td>Temperature</td></tr>
-				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('hum')" checked/></td><td>Humidity</td></tr>
-				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('dep')" checked/></td><td>Depth</td></tr>
-				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('batt')" checked/></td><td>Battery</td></tr>
-				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('head')" checked/></td><td>Heading</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('temp')" checked/></td><td>Temperature</td>
+				<td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('hum')" checked/></td><td>Humidity</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('dep')" checked/></td><td>Depth</td>
+				<td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('batt')" checked/></td><td>Battery</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('head')" checked/></td><td>Heading</td>
+				<td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('roll')" checked/></td><td>Roll</td></tr>
+				<tr><td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('pitch')" checked/></td><td>Pitch</td>
+				<td><input type="checkbox" name="checkbox[]" class="top5" onchange="toggleCheckbox('yaw')" checked/></td><td>Yaw</td></tr>
 			</table>
 		</form>
 	</div>
@@ -156,21 +166,35 @@ label { cursor: hand; cursor: pointer;}
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     		<script>
-    		  var socket = io('http://192.168.1.102:8888');
+    		  var socket = io('http://192.168.1.206:8888');
 		  
 		  socket.emit('chat message', 't');
-      		  socket.on('chat message', function(msg){
+      		  socket.on('arduino', function(msg){
 		  	
 		  	var msg_arr = msg.split(", ");
 			var temp1 = msg_arr[0].split(" : ");
        		  	document.getElementById("temp").innerHTML = "Temp: ".concat(temp1[1]);
-			var hum1 = msg_arr[1].split(" : ")
+			var dep1 = msg_arr[1].split(" : ")
+       		  	document.getElementById("dep").innerHTML = "Depth: ".concat(dep1[1]);
+			var hum1 = msg_arr[2].split(" : ")
        		  	document.getElementById("hum").innerHTML = "Humidity: ".concat(hum1[1]);
+			var temp1 = msg_arr[3].split(" : ");
+       		  	document.getElementById("temp").innerHTML = "Temp: ".concat(temp1[1]);
 			
 			
      		  });
-		  socket.on('other', function(msg){
-       		  	document.getElementById("head").innerHTML = "Heading: ".concat(msg);
+		  socket.on('mav', function(msg){
+		  	var msg_arr = msg.split(", ");
+			var batt1 = msg_arr[0].split(" : ");
+       		  	document.getElementById("batt").innerHTML = "Battery: ".concat(batt1[1]);
+			var head1 = msg_arr[1].split(" : ")
+       		  	document.getElementById("head").innerHTML = "Heading: ".concat(head1[1]);
+			var roll1 = msg_arr[2].split(" : ");
+       		  	document.getElementById("roll").innerHTML = "Roll: ".concat(roll1[1]);
+			var pitch1 = msg_arr[3].split(" : ");
+       		  	document.getElementById("pitch").innerHTML = "Pitch: ".concat(pitch1[1]);
+			var yaw1 = msg_arr[4].split(" : ");
+       		  	document.getElementById("yaw").innerHTML = "Yaw: ".concat(yaw1[1]);
 			
 			
      		  });

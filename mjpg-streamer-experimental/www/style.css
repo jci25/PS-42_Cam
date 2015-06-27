@@ -240,6 +240,30 @@ img.x-flipped-mirrored-rotated-270 {
     background: rgba(54, 25, 25, .5);
     color: blue;
 }
+.imu {
+    position: relative;
+}
+.imu roll {
+    position: absolute;
+    left: 0px;
+    background: rgb(54, 25, 25); 
+    background: rgba(54, 25, 25, .5);
+    color: blue;
+}
+.imu pitch {
+    position: absolute;
+    left: 230px;
+    background: rgb(54, 25, 25); 
+    background: rgba(54, 25, 25, .5);
+    color: blue;
+}
+.imu yaw {
+    position: absolute;
+    left: 440px;
+    background: rgb(54, 25, 25); 
+    background: rgba(54, 25, 25, .5);
+    color: blue;
+}
 #rotate .btnface {
 	background:url("rotateicons.png") no-repeat scroll 7px 50% transparent;
 }
