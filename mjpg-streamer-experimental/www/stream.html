@@ -141,6 +141,7 @@ label { cursor: hand; cursor: pointer;}
 			<roll id="roll">Roll: XX</roll>
 			<pitch id="pitch">Pitch: XX</pitch>
 			<yaw id="yaw">Yaw: XX</yaw>
+			<inches id="inches" hidden>0</inches>
 		</div>
 	</div>
 	</br>
@@ -180,6 +181,8 @@ label { cursor: hand; cursor: pointer;}
        		  	document.getElementById("hum").innerHTML = "Humidity: ".concat(hum1[1]);
 			var temp1 = msg_arr[3].split(" : ");
        		  	document.getElementById("temp").innerHTML = "Temp: ".concat(temp1[1]);
+       		  	var inches = msg_arr[4].split(" : ");
+       		  	document.getElementById("inches").innerHTML = temp1[1];
 			
 			
      		  });
