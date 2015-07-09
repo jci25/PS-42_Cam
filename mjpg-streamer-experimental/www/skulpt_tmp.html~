@@ -50,7 +50,7 @@ function runit2() {
 	Sk.configure({output:outf, read:builtinRead});
       	(Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
 	try {
-	   module = Sk.importMainWithBody("<stdin>", false, prog);
+	    var module = Sk.importMainWithBody("<stdin>", false, prog);
 	    var obj = module.tp$getattr('Test');
 	    var runMethod = obj.tp$getattr('run');
 	    var ret = Sk.misceval.callsim(runMethod, 10);

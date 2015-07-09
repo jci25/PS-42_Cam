@@ -209,7 +209,7 @@ label { cursor: hand; cursor: pointer;}
 	</div>
 	
 	</br>
-	<button type="button" onclick="markPoint()">Mark Point</button> 
+	<button type="button" onclick="runit()">Run</button> 
 	
 	
 	<form id="myform" action="javascript:alert();">
