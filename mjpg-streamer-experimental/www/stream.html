@@ -150,7 +150,8 @@ label { cursor: hand; cursor: pointer;}
 	  function updateHead()
 	{
 	    var prog = document.getElementById("yourcode").value;
-            var val = document.getElementById("yaw").textContent;
+            var val = document.getElementById("head").textContent;
+	    val = val.replace("Heading: ", "");
 	    var obj = module.tp$getattr('Test');
 	    var runMethod = obj.tp$getattr('head');
 	    Sk.misceval.callsim(runMethod, Number(val));
@@ -172,8 +173,58 @@ label { cursor: hand; cursor: pointer;}
 	    var obj = module.tp$getattr('Test');
 	    var runMethod = obj.tp$getattr('run');
 	    var ret = Sk.misceval.callsim(runMethod);
-	    alert(ret);
-		
+	    try{
+	    	pointPos(ret);
+	    }catch(e){
+		try{
+	            pointColor(ret);
+		}catch(e){
+		    try{
+	                pointType(ret);
+	            }catch(e){
+			try{
+	                    pointResize(ret);
+			}catch(e){
+			    pointSize(ret);
+			}
+		    }
+		}
+	    }
+	}
+	function pointResize(box)
+	{
+	    var prog = document.getElementById("yourcode").value;
+	    var obj = module.tp$getattr('Test');
+	    var runMethod = obj.tp$getattr('pointResize');
+	    var ret = Sk.misceval.callsim(runMethod, box);
+	}
+	function pointSize(box)
+	{
+	    var prog = document.getElementById("yourcode").value;
+	    var obj = module.tp$getattr('Test');
+	    var runMethod = obj.tp$getattr('pointSize');
+	    var ret = Sk.misceval.callsim(runMethod, box);
+	}
+	function pointPos(box)
+	{
+	    var prog = document.getElementById("yourcode").value;
+	    var obj = module.tp$getattr('Test');
+	    var runMethod = obj.tp$getattr('pointPos');
+	    var ret = Sk.misceval.callsim(runMethod, box);
+	}
+	function pointColor(box)
+	{
+	    var prog = document.getElementById("yourcode").value;
+	    var obj = module.tp$getattr('Test');
+	    var runMethod = obj.tp$getattr('pointColor');
+	    var ret = Sk.misceval.callsim(runMethod, box);
+	}
+	function pointType(box)
+	{
+	    var prog = document.getElementById("yourcode").value;
+	    var obj = module.tp$getattr('Test');
+	    var runMethod = obj.tp$getattr('pointType');
+	    var ret = Sk.misceval.callsim(runMethod, box);
 	}	
 	</script>
     <div id="sidebar">
@@ -204,7 +255,7 @@ label { cursor: hand; cursor: pointer;}
 			<roll id="roll">Roll: XX</roll>
 			<pitch id="pitch">Pitch: XX</pitch>
 			<yaw id="yaw">00</yaw>
-			<inches id="inches" hidden>79</inches>
+			<inches id="inches" hidden>10</inches>
 		</div>
 	</div>
 	
@@ -244,7 +295,26 @@ class Test:
          ps42.fd(dist)
 
      def run():
-         return ps42.position()
+             box = turtle.Turtle()
+	     return box
+	     
+     def pointHead(point):
+             point.setheading(ps42.heading())
+
+     def pointPos(point):
+             point.setpos(ps42.pos())
+
+     def pointColor(point):
+             point.color("red")
+
+     def pointType(point):
+             point.shape("circle")
+	     
+     def pointSize(point):
+             point.shapesize(.5, .5, .5)
+	     
+     def pointResize(point):
+             point.resizemode("user")
 
 a = Test()
 
@@ -256,8 +326,7 @@ a = Test()
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     		<script>
-    		  var socket = io('http://192.168.1.206:8888');
-		  
+    		  var socket = io('http://' + location.hostname + ':8888');
 		  socket.emit('chat message', 't');
       		  socket.on('arduino', function(msg){
 		  	
@@ -269,7 +338,7 @@ a = Test()
 			var hum1 = msg_arr[2].split(" : ")
        		  	document.getElementById("hum").innerHTML = "Humidity: ".concat(hum1[1]);
 			var temp1 = msg_arr[3].split(" : ");
-       		  	document.getElementById("temp").innerHTML = "Temp: ".concat(temp1[1]);
+       		  	document.getElementById("temp_hull").innerHTML = "Temp: ".concat(temp1[1]);
        		  	var inches = msg_arr[4].split(" : ");
        		  	document.getElementById("inches").innerHTML = temp1[1];
 			updatePos();

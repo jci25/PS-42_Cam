@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>PS42 Stream</title>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script type="text/javascript" src="jquery.js"></script>    
+    <script type="text/javascript" src="./jsfeat.js"></script>    
+    <script type="text/javascript" src="jquery.rotate.js"></script>
+    <script src="./jquery.min.js" type="text/javascript"></script> 
+    <script src="./skulpt.min.js" type="text/javascript"></script> 
+    <script src="./skulpt-stdlib.js" type="text/javascript"></script> 
+    <link rel="stylesheet" href="jquery.checkbox.css" />
+    <link rel="stylesheet" href="nouislider.min.css">
+		<link rel="stylesheet" href="jquery.safari-checkbox.css" />
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="jquery.checkbox.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				document.getElementById("main_data").style.visibility = "hidden";
+				document.getElementById("selector1").style.visibility = "hidden";
+			});
+
+			displayForm = function (elementId)
+			{
+				var content = [];
+				$('#' + elementId + ' input').each(function(){
+					var el = $(this);
+					if ( (el.attr('type').toLowerCase() == 'radio'))
+					{
+						if ( this.checked )
+							content.push([
+								'"', el.attr('name'), '": ',
+								'value="', ( this.value ), '"',
+								( this.disabled ? ', disabled' : '' )
+							].join(''));
+					}
+					else
+						content.push([
+							'"', el.attr('name'), '": ',
+							( this.checked ? 'checked' : 'not checked' ), 
+							( this.disabled ? ', disabled' : '' )
+						].join(''));
+				});
+				alert(content.join('\n'));
+			}
+			
+			changeStyle = function(skin)
+			{
+				jQuery('#myform :checkbox').checkbox((skin ? {cls: skin} : {}));
+			}
+			
+			
+		</script>
+
+	<style type="text/css">
+body, html { padding: 0px; margin: 0px; background: #ccc; font-family: Arial;font-size: 13px;}
+h1 {margin: 20px 0 0 0;padding: 0;color: #09f;font-size: 28px; text-align: center;font-weight: bold;}
+h2 {margin: 25px 0 0 0;padding: 0;font-size: 20px;}
+h3 {margin: 25px 0 0 0;padding: 0;font-size: 16px;}
+p {clear: both;vertical-align: middle;font-size: 13px;margin: 10px 0 0 0;padding: 0;}
+pre { display: block;margin: 0px;padding: 2px 2px 2px 2px; border: 1px solid #888; background: #ccc;}
+code { display: block;margin: 0px;padding: 2px 2px 2px 20px;border: 1px solid #888;background: #fff;}
+.hr { clear: both;margin: 20px 0 20px 0;font-size: 2px;line-height: 2px;background: #ccc;border: 1px solid #888;height: 2px;display: block;}
+table {font-size: 13px;}
+a {color: #069;}
+a:hover{color: #e30;}
+a.code{display: block;float:left;clear:both;padding: 2px 0px;}
+label { cursor: hand; cursor: pointer;}
+		</style>
+  </head>
+
+  <body onload="runit();">
+  	<script src="jquery.min.js"></script>
+  	<script src="nouislider.min.js"></script>
+	<script type="text/javascript">
+	  var json_data;
+	  
+	  var slider = document.getElementById('slider');
+	  
+	  noUiSlider.create(slider, {
+	  	start: [0],
+		range: {
+			'min': 0,
+			'max': 100
+		}
+	});
+	  
+	  function runit() { 
+		$(document).ready(function()
+			{
+				$.getJSON('db.json', function(json)
+					{
+						json_data = json;
+						console.log(json);
+						$("select#selector1").append( $("<option>").val("none").html("select a run"));
+						Object.keys(json_data).forEach(function(k) {
+							if(k !== "_default"){
+								$("select#selector1").append( $("<option>")
+									.val(k)
+									.html(k)
+								);
+							}
+							document.getElementById("selector1").style.visibility = "visible";
+						});
+					});
+			});
+	    
+	  }
+	  function loadData(sel)
+	  {
+	  	var value = sel.value;
+		var data = json_data[value];
+		var key, count = 0;
+		for(key in data)
+		{
+			count++;
+		}
+		document.getElementById("main_data").style.visibility = "visible";
+		
+		
+	  } 
+	  
+	</script>
+    <div id="sidebar">
+      <h1>WeGo Moore - Project NEMO</h1>
+      <h2>PS42 Live Video Stream</h2>
+
+      <div id="menu">
+        <a href="index.html">Home</a>
+        <a href="static.html">Static</a> 
+        <a class="active" href="stream.html">Stream</a> 
+	
+      </div>
+
+    </div>
+
+    <div id="content">
+      <h1>Stream</h1>
+      <h2>Display the stream</h2>
+	<select size="1" id="selector1" onChange="loadData(this)"></select>
+	<div class="imgHolder" id="main_data">
+    		<img id="streamimage" class="xform" src="/?action=stream" />
+    		<temp id="temp">Temp: XX</temp>
+		<humidity id="hum">Humidity: XX</humidity>
+		<depth id="dep">Depth: XX</depth>
+		<battery id="batt">Battery: XX</battery>
+		<heading id="head">Heading: XX</heading>
+		<bot>.</bot>
+		<div class="imu">
+			<roll id="roll">Roll: XX</roll>
+			<pitch id="pitch">Pitch: XX</pitch>
+			<yaw id="yaw">00</yaw>
+			<inches id="inches" hidden>10</inches>
+		</div>
+		<input type="range" min="0" max="100"  id="slider"></div>
+	</div>
+	
+	</br>
+	
+	
+	<br /> 
+	</div>
+	
+	
+	
+	
+  </body>
+</html>
