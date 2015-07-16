@@ -1,1 +1,0 @@
-/home/pi/NEMO/camera/PS-42_Cam/mjpg-streamer-experimental/plugins/input_raspicam/build/CMakeFiles/input_raspicam.dir

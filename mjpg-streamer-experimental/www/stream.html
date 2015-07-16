@@ -154,8 +154,10 @@ label { cursor: hand; cursor: pointer;}
 	    val = val.replace("Heading: ", "");
 	    var obj = module.tp$getattr('Test');
 	    var runMethod = obj.tp$getattr('head');
-	    Sk.misceval.callsim(runMethod, Number(val));
-		
+	    try{
+	    	Sk.misceval.callsim(runMethod, Number(val));
+	    }catch(e){
+	    }
 	}
 	function updatePos()
 	{
@@ -163,8 +165,10 @@ label { cursor: hand; cursor: pointer;}
             var val = document.getElementById("inches").textContent;
 	    var obj = module.tp$getattr('Test');
 	    var runMethod = obj.tp$getattr('dist');
-	    Sk.misceval.callsim(runMethod, Number(val));
-
+	    try{
+	    	Sk.misceval.callsim(runMethod, Number(val));
+	    }catch(e){
+	    }
 		
 	}
 	function markPoint()
@@ -250,6 +254,7 @@ label { cursor: hand; cursor: pointer;}
 		<depth id="dep">Depth: XX</depth>
 		<battery id="batt">Battery: XX</battery>
 		<heading id="head">Heading: XX</heading>
+		<hull_temp id="hull_temp">Hull Temp: XX</hull_temp>
 		<bot>.</bot>
 		<div class="imu">
 			<roll id="roll">Roll: XX</roll>
@@ -338,9 +343,9 @@ a = Test()
 			var hum1 = msg_arr[2].split(" : ")
        		  	document.getElementById("hum").innerHTML = "Humidity: ".concat(hum1[1]);
 			var temp1 = msg_arr[3].split(" : ");
-       		  	document.getElementById("temp_hull").innerHTML = "Temp: ".concat(temp1[1]);
+       		  	document.getElementById("hull_temp").innerHTML = "Temp: ".concat(temp1[1]);
        		  	var inches = msg_arr[4].split(" : ");
-       		  	document.getElementById("inches").innerHTML = temp1[1];
+       		  	document.getElementById("inches").innerHTML = inches[1];
 			updatePos();
 			
      		  });
