@@ -5,6 +5,7 @@
     <title>PS42 Stream</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
     <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="./jquery-ui.css" />
     <script type="text/javascript" src="jquery.js"></script>    
     <script type="text/javascript" src="./jsfeat.js"></script>    
     <script type="text/javascript" src="jquery.rotate.js"></script>
@@ -118,7 +119,38 @@ label { cursor: hand; cursor: pointer;}
 			count++;
 		}
 		document.getElementById("main_data").style.visibility = "visible";
-		
+		$(function(){
+	
+			var currentValue = $('#currentValue');
+	
+			$("#slider").slider({ 
+				max: count,
+				min: 0,
+				slide: function(event, ui) {
+					var img_src = "data:image/png;base64,".concat(data[ui.value]['image']);
+					document.getElementById("streamimage").src = img_src;
+					var batt = "Battery: ".concat(data[ui.value]['battery']);
+                                        document.getElementById("batt").innerHTML = batt;
+					var hum = "Humidity: ".concat(data[ui.value]['humidity']);
+                                        document.getElementById("hum").innerHTML = hum;
+					var dep = "Depth: ".concat(data[ui.value]['depth']);
+                                        document.getElementById("dep").innerHTML = dep;
+					var hull_temp = "Hull Temp: ".concat(data[ui.value]['hulltemp']);
+                                        document.getElementById("hull_temp").innerHTML = hull_temp;
+					var pitch = "Pitch: ".concat(data[ui.value]['pitch']);
+                                        document.getElementById("pitch").innerHTML = pitch;
+					var roll = "Roll: ".concat(data[ui.value]['roll']);
+                                        document.getElementById("roll").innerHTML = roll;
+					var temp = "Temp: ".concat(data[ui.value]['watertemp']);
+                                        document.getElementById("temp").innerHTML = temp;
+					var head = "Heading: ".concat(data[ui.value]['heading']);
+                                        document.getElementById("head").innerHTML = head;
+					var yaw = "Yaw: ".concat(data[ui.value]['yaw']);
+                                        document.getElementById("yaw").innerHTML = yaw;
+				}
+			});
+	
+		});		
 		
 	  } 
 	  
@@ -129,39 +161,54 @@ label { cursor: hand; cursor: pointer;}
 
       <div id="menu">
         <a href="index.html">Home</a>
-        <a href="static.html">Static</a> 
-        <a class="active" href="stream.html">Stream</a> 
+        <a href="stream.html">Stream</a> 
+        <a class="active" href=playback.html">Playback</a> 
 	
       </div>
 
     </div>
 
     <div id="content">
-      <h1>Stream</h1>
-      <h2>Display the stream</h2>
+      <h1>Playback</h1>
+      <h2>Display the recorded data</h2>
 	<select size="1" id="selector1" onChange="loadData(this)"></select>
 	<div class="imgHolder" id="main_data">
-    		<img id="streamimage" class="xform" src="/?action=stream" />
+    		<img id="streamimage" class="xform" />
     		<temp id="temp">Temp: XX</temp>
 		<humidity id="hum">Humidity: XX</humidity>
 		<depth id="dep">Depth: XX</depth>
+		<hull_temp id="hull_temp">Hull Temp: XX</hull_temp>
 		<battery id="batt">Battery: XX</battery>
 		<heading id="head">Heading: XX</heading>
 		<bot>.</bot>
 		<div class="imu">
 			<roll id="roll">Roll: XX</roll>
 			<pitch id="pitch">Pitch: XX</pitch>
-			<yaw id="yaw">00</yaw>
+			<yaw id="yaw">Yaw: XX</yaw>
 			<inches id="inches" hidden>10</inches>
 		</div>
-		<input type="range" min="0" max="100"  id="slider"></div>
-	</div>
+		<div id="slider"></div>
+		</div>
+		</br>
+		<br/>
+		<button onclick="myFunction()">Download All Runs</button>
+
+<script>
+function myFunction() {
+    window.open("./db.json");
+}
+</script>
+	
 	
 	</br>
 	
 	
 	<br /> 
 	</div>
+	<br/>	
+	<script src="./jquery-1.7.1.min.js"></script>
+	<script src="./jquery-ui.min.js"></script>
+
 	
 	
 	

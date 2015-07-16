@@ -3,6 +3,10 @@
 Version: 1.1, November 28, 2005 */
 
 /**************** Page and tag styles ****************/
+#slider{
+	margin-top:20px;
+	padding:0px;
+}
 
 body
 {margin:0; padding:0; color:#303030; background:#fafafa url(bodybg.gif) top left repeat-y; font:76% Verdana,Tahoma,sans-serif;}
